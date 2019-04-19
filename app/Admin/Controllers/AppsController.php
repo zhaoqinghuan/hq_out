@@ -66,8 +66,7 @@ class AppsController extends Controller
     public function create(Content $content)
     {
         return $content
-            ->header('Create')
-            ->description('description')
+            ->header('添加应用')
             ->body($this->form());
     }
 
@@ -81,7 +80,7 @@ class AppsController extends Controller
         $grid = new Grid(new App);
 
         $grid->id('Id')->sortable();
-        $grid->image('Icon');
+        $grid->image('Icon')->image('http://out.test/uploads/', 50, 50);;
         $grid->path('下载链接');
         $grid->name('软件名称');
 
@@ -117,10 +116,9 @@ class AppsController extends Controller
     {
         $form = new Form(new App);
 
-        $form->image('image', 'Image');
-        $form->text('path', 'Path');
-        $form->text('name', 'Name');
-
+        $form->image('image', '应用ICON')->uniqueName()->rules('required|image');
+        $form->file('path', '应用上传')->uniqueName()->rules('required');
+        $form->text('name', '应用名称')->rules('required');
         return $form;
     }
 }

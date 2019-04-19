@@ -9,7 +9,8 @@ Route::group([
     'namespace'     => config('admin.route.namespace'),
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
-
     $router->get('/', 'HomeController@index');
     $router->get('apps', 'AppsController@index');
+    $router->get('apps/create', 'AppsController@create');
+    $router->post('apps', 'AppsController@store');
 });
