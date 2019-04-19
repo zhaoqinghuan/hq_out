@@ -14,3 +14,5 @@
 Route::get('/', function () {
     return view('welcome');
 })->name('index');
+
+Route::get('/{union}', 'AppsController@index')->name('apps.index');
