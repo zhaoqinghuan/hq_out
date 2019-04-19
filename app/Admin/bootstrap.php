@@ -18,4 +18,10 @@
  *
  */
 
+use Encore\Admin\Grid\Column;
+use App\Admin\Extensions\Popover;
+
 Encore\Admin\Form::forget(['map', 'editor']);
+
+
+Column::extend('popover', Popover::class);

@@ -9,6 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use QrCode;
 
 class AppsController extends Controller
 {
@@ -23,7 +24,7 @@ class AppsController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('商品列表')
+            ->header('应用列表')
             ->body($this->grid());
     }
 
@@ -77,12 +78,29 @@ class AppsController extends Controller
      */
     protected function grid()
     {
+        $path = config('app.url');
+
         $grid = new Grid(new App);
 
         $grid->id('Id')->sortable();
-        $grid->image('Icon')->image('http://out.test/uploads/', 50, 50);;
-        $grid->path('下载链接');
-        $grid->name('软件名称');
+        $grid->image('Icon')->image($path.'/uploads/', 50, 50);
+        $grid->name('应用名称');
+        $grid->union('下载地址')->popover('right');
+        $grid->created_at('创建时间');
+        $grid->disableFilter();
+        $grid->disableExport();
+
+        $grid->actions(function ($actions) {
+            $actions->disableView();
+            $actions->disableEdit();
+        });
+        $grid->tools(function ($tools) {
+            // 禁用批量删除按钮
+            $tools->batch(function ($batch) {
+                $batch->disableDelete();
+            });
+        });
+
 
         return $grid;
     }
@@ -119,6 +137,13 @@ class AppsController extends Controller
         $form->image('image', '应用ICON')->uniqueName()->rules('required|image');
         $form->file('path', '应用上传')->uniqueName()->rules('required');
         $form->text('name', '应用名称')->rules('required');
+
+
+        //  自定义事件
+        $form->saving(function (Form $form) {
+
+            $form->model()->union = str_random(4);
+        });
         return $form;
     }
 }

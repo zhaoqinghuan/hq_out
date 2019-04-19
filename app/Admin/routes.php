@@ -13,4 +13,5 @@ Route::group([
     $router->get('apps', 'AppsController@index');
     $router->get('apps/create', 'AppsController@create');
     $router->post('apps', 'AppsController@store');
+    $router->delete('apps/{id}', 'AppsController@destroy');
 });
